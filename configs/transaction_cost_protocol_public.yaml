@@ -1,0 +1,20 @@
+protocol_version: "1.0.0"
+purpose: "Predeclared transaction-cost sensitivity on frozen equal-weight portfolios"
+cost_basis_points_one_way: [0, 5, 10, 25, 50]
+turnover_definition: "Phase 2A sum absolute target weight minus prior drifted weight"
+cost_formula: "net_return = gross_return - one_way_cost_rate * drift_adjusted_turnover"
+portfolios:
+  - "decile_10"
+  - "decile_1"
+  - "top_minus_bottom"
+long_short_turnover: "sum of top and bottom leg turnover"
+initial_month: "net return is missing because prior drifted weights and turnover are undefined"
+entries_and_exits: "included through zero weight on the missing side of the union"
+short_leg_convention: "bottom leg enters top-minus-bottom with negative return exposure; turnover cost remains positive"
+excluded_costs:
+  - "borrowing fees"
+  - "market impact"
+  - "bid-ask asymmetry"
+  - "financing"
+selection_rule: "report every preregistered cost scenario; do not select a favorable assumption"
+

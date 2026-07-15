@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use this public-data research project, please cite it using this metadata."
+title: "Machine Learning for Cross-Sectional Stock Returns: A Public-Data Replication and Extension of Gu, Kelly and Xiu"
+type: software
+authors:
+  - family-names: "Singh"
+    given-names: "Kunal"
+version: 1.0.0
+date-released: 2026-07-14
+license: MIT
+keywords:
+  - empirical asset pricing
+  - machine learning
+  - model validation
+  - reproducibility
+  - portfolio analytics
+references:
+  - type: article
+    title: "Empirical Asset Pricing via Machine Learning"
+    authors:
+      - family-names: "Gu"
+        given-names: "Shihao"
+      - family-names: "Kelly"
+        given-names: "Bryan"
+      - family-names: "Xiu"
+        given-names: "Dacheng"
+    year: 2020
+    journal: "The Review of Financial Studies"
+    volume: 33
+    issue: 5
+    start: 2223
+    end: 2273
+    doi: "10.1093/rfs/hhaa009"

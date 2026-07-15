@@ -1,0 +1,107 @@
+protocol_version: "1.0.0"
+project_label: "public-data partial replication and extension"
+dataset:
+  filename: "sp500_price_panel_2010_2023.csv (not redistributed; see docs/data_access.md)"
+  sha256: "8866aae8f7240c93da20b09a2da067b827e07861bd6af1a64e1b8ad6e028a71a"
+  observation_unit: "one security-month"
+  security_identifier: "permno"
+  security_label: "ticker"
+  date_field: "DATE"
+  target_field: "RET"
+  target_definition: "preconstructed next-month adjusted-price raw return supplied by the frozen panel"
+  target_horizon_months: 1
+  predictors:
+    - mom_1m
+    - mom_3m
+    - mom_6m
+    - mom_12m
+    - vol_3m
+    - vol_6m
+    - vol_12m
+    - downside_vol_6m
+    - max_drawdown_12m
+    - price_to_12m_high
+    - moving_average_gap_3m
+    - moving_average_gap_6m
+    - beta_12m_vs_spy
+    - correlation_12m_vs_spy
+    - average_monthly_volume
+periods:
+  training_start: "2010-01-31"
+  training_end: "2018-04-30"
+  validation_start: "2018-05-31"
+  validation_end: "2021-01-31"
+  final_test_start: "2021-02-28"
+  final_test_end: "2023-11-30"
+  policy: "expanding training window with calendar-year refits"
+  refit_schedule: "first forecast month and each subsequent January"
+preprocessing:
+  missing_data_policy: "within each feature month, rank observed values and map to [-1,1]; impute missing ranked values to zero, the ranked cross-sectional median"
+  scaling_policy: "monthly cross-sectional rank scaling only; no full-sample scaler"
+  winsorization: "none"
+  feature_selection: "none"
+models:
+  random_seed: 42
+  families:
+    OLS:
+      grid:
+        - {}
+    Ridge:
+      grid:
+        - alpha: 10.0
+    Lasso:
+      grid:
+        - alpha: 0.001
+          max_iter: 10000
+    RandomForest:
+      grid:
+        - n_estimators: 50
+          max_depth: 10
+          min_samples_leaf: 20
+          max_features: 1.0
+    GradientBoosting:
+      grid:
+        - n_estimators: 50
+          learning_rate: 0.05
+          max_depth: 3
+          loss: "huber"
+  excluded_legacy_family: "NeuralNetwork is intentionally excluded because Phase 2A explicitly prohibits neural-network work"
+selection:
+  primary_metric: "gkx_r2_oos_zero"
+  rule: "select the highest validation gkx_r2_oos_zero; break exact ties by ascending model name"
+  final_test_role: "report all preregistered models; never select or retune from final-test results"
+metrics:
+  primary:
+    - gkx_r2_oos_zero
+  secondary:
+    - mean_squared_error
+    - mean_absolute_error
+    - r2_oos_historical_mean
+    - mean_monthly_spearman_rank_ic
+    - mean_monthly_pearson_correlation
+    - prediction_coverage
+portfolio:
+  weighting: "equal weight public-data adaptation"
+  quantiles: 10
+  tie_handling: "sort by prediction ascending, then security identifier ascending; assign balanced deterministic bins by zero-based row position"
+  missing_prediction_policy: "retain an explicit validity flag and fail the locked run if any eligible prediction is invalid"
+  value_weighting_possible: false
+  value_weighting_status: "deferred because reliable lagged market capitalization is unavailable"
+  turnover: "sum of absolute differences between target weights and prior weights drifted by realized constituent returns"
+  transaction_costs: "deferred"
+random_seeds:
+  numpy: 42
+  scikit_learn: 42
+locked_test_conditions:
+  - "protocol hash exists and matches this file"
+  - "validation model comparison exists"
+  - "validation-selected primary-model decision exists and matches the protocol hash"
+  - "preflight integrity record exists and passed"
+  - "immutable historical file hashes match the Phase 1 baseline"
+known_limitations:
+  - "Fixed public-data universe of 497 surviving S&P 500 securities"
+  - "Current-constituent survivorship and membership look-ahead bias remain unresolved"
+  - "No delisted-security or delisting-return coverage"
+  - "Raw adjusted-price return target rather than CRSP excess return"
+  - "Fifteen price and volume predictors rather than the paper's complete design"
+  - "No reliable lagged market capitalization; value-weighted GKX comparison is unavailable"

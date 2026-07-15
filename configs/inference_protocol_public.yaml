@@ -1,0 +1,45 @@
+protocol_version: "1.0.0"
+purpose: "Phase 2B statistical inference on frozen Phase 2A predictions and portfolios"
+phase2a_provenance:
+  commit: "5db9a1924d80ce3b869733be25240899e8bf5559"
+  tag: "phase2a-validity-corrected"
+  experiment_protocol_sha256: "3a1b741bdae6220711bfe32984cc313ecc5e51c4243082998aea13fa12931ada"
+primary_model: "RandomForest"
+sample_frequency: "monthly"
+confidence_level: 0.95
+hac:
+  kernel: "Bartlett"
+  max_lags: 3
+bootstrap:
+  method: "moving block bootstrap by calendar month"
+  block_length_months: 6
+  repetitions: 2000
+  random_seed: 20260714
+  resampling_unit: "calendar month with all cross-sectional observations retained"
+estimands:
+  - "GKX zero-benchmark OOS R-squared"
+  - "mean monthly Spearman rank IC"
+  - "mean top-decile return"
+  - "mean bottom-decile return"
+  - "mean top-minus-bottom return"
+  - "mean drift-adjusted turnover"
+pairwise_comparisons:
+  loss: "monthly cross-sectional mean squared error"
+  multiple_comparison_adjustment: "Holm"
+  interpretation: "diagnostic; cross-sectional dependence and short monthly sample limit formal claims"
+subperiods:
+  equal_length:
+    first: ["2021-02-28", "2022-06-30"]
+    second: ["2022-07-31", "2023-11-30"]
+  yearly: [2021, 2022, 2023]
+  conditional_splits:
+    market_return: "above versus at-or-below full locked-test monthly median; defined before outcome calculation"
+    cross_sectional_volatility: "above versus at-or-below full locked-test monthly median"
+    prediction_dispersion: "above versus at-or-below each model's full locked-test monthly median"
+restrictions:
+  model_training: false
+  model_retuning: false
+  feature_changes: false
+  prediction_changes: false
+  portfolio_orientation: "fixed as decile 10 minus decile 1"
+

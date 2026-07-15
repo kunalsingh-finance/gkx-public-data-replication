@@ -1,0 +1,34 @@
+{
+  "manifest_version": 1,
+  "project_classification": "public-data partial replication and extension",
+  "research_dataset": {
+    "filename": "sp500_price_panel_2010_2023.csv",
+    "redistributed": false,
+    "sha256": "8866aae8f7240c93da20b09a2da067b827e07861bd6af1a64e1b8ad6e028a71a",
+    "rows": 77988,
+    "securities": 497,
+    "limitation": "fixed public-data universe of surviving securities; survivorship and historical-membership look-ahead bias remain unresolved"
+  },
+  "phase2a": {
+    "git_commit": "5db9a1924d80ce3b869733be25240899e8bf5559",
+    "git_tag": "phase2a-validity-corrected",
+    "protocol_sha256": "3a1b741bdae6220711bfe32984cc313ecc5e51c4243082998aea13fa12931ada",
+    "private_run_manifest_sha256": "8ae6e0859416285bfa426e1ef06e9ebb4a612284141a314a1fe502d5c7d344de"
+  },
+  "phase2b": {
+    "git_commit": "16480e7779ff5e60783336222b029090a9fbc9d3",
+    "git_tag": "phase2b-economic-diagnostics-complete",
+    "private_manifest_sha256": "562d57b377bbecef74be5506a23033134268e6d41afa8b59d991436cfcab6a2c"
+  },
+  "public_aggregate_sources": {
+    "metric_reconciliation.csv": "a8c9ba3ec4f269abeefacf005a37bc9f2ab8c4e83c46eccda427f556ee8b7be3",
+    "decile_monotonicity.csv": "b75767a9f08609163334cbac6891a53b0765f73f3e35bcb46319fb3d31eec56b",
+    "statistical_inference.csv": "82c9eb167838d08db8873148075e3f6cd4eb79b4e94ed967d6c27156f925de32",
+    "factor_regressions.csv": "31f39ab6925028dec1e8d2d721c32a1c95e8a412e22ced0e034bd03cbbc3e5aa"
+  },
+  "factor_archives": {
+    "redistributed": false,
+    "F-F_Research_Data_5_Factors_2x3_CSV.zip_sha256": "ddc0280b2bb8ca6c4c6ea5b68923a5549c37259bde468202108c11e812bd4241",
+    "F-F_Momentum_Factor_CSV.zip_sha256": "37baf72ae4eace9715e8746413d0122334c63aa4083fd1c3cf2060fa04e4bd28"
+  }
+}
