@@ -1,0 +1,24 @@
+name: Public research checks
+on: [push, pull_request]
+jobs:
+  verify:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: python -m pip install -e .
+      - name: Verify committed public artifacts
+        run: python scripts/verify_public_manifest.py
+      - run: python -m pytest
+      - run: python scripts/generate_sample.py
+      - run: python scripts/validate_sample.py
+      - run: python scripts/generate_publication_tables.py
+      - run: python scripts/generate_publication_figures.py
+      - run: python scripts/check_public_links.py
+      - run: python scripts/scan_public_tree.py

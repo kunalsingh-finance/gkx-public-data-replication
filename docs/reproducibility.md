@@ -21,11 +21,14 @@ On macOS/Linux, activate with `.venv/bin/python` or the shell’s standard virtu
 
 ```powershell
 .\.venv\Scripts\python -m pytest -q
+.\.venv\Scripts\python scripts\verify_public_manifest.py
 .\.venv\Scripts\python scripts\generate_sample.py
 .\.venv\Scripts\python scripts\validate_sample.py
 ```
 
 The sample is synthetic and verifies only schema, uniqueness, dates, target timing, and deterministic calculations.
+
+GitHub Actions runs these public checks on Linux and Windows, along with table/chart generation and link/public-tree checks. It does not fit or validate the private full-panel models. The manifest verifier checks committed artifact identities, normalizing UTF-8 text CRLF endings to LF so Windows checkouts preserve the same public identity; binary files retain exact byte hashes.
 
 ## Regenerate publication tables and charts
 
