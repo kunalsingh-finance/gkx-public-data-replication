@@ -3,6 +3,7 @@
 from pathlib import Path
 import hashlib
 import json
+from verify_public_manifest import canonical_bytes
 
 
 EXCLUDED_PARTS: set[str] = {".git", ".venv", "build", "__pycache__", ".pytest_cache"}
@@ -18,11 +19,11 @@ def main() -> None:
         records.append(
             {
                 "path": path.relative_to(root).as_posix(),
-                "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
-                "size_bytes": path.stat().st_size,
+                "sha256": hashlib.sha256(canonical_bytes(path)).hexdigest(),
+                "size_bytes": len(canonical_bytes(path)),
             }
         )
-    output_path.write_text(json.dumps({"manifest_version": 1, "files": records}, indent=2) + "\n", encoding="utf-8")
+    output_path.write_text(json.dumps({"manifest_version": 2, "text_identity": "UTF-8 text with CRLF normalized to LF; binary bytes unchanged", "files": records}, indent=2) + "\n", encoding="utf-8")
 
 
 if __name__ == "__main__":
